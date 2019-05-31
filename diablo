@@ -1,0 +1,6 @@
+if [ $1 == "full" ]
+   then
+     wine "/home/$USER/bin/Diablo II/Diablo II.exe"
+   else
+     wine explorer /desktop=$1,800x600 "/home/$USER/bin/Diablo II/Diablo II.exe" -nohide
+fi

@@ -1,0 +1,44 @@
+
+#Requires youtube-dl and ffmpeg
+# Usage: dogv "http://www.youtube.com/some-video-link" output_file_name-without-extension
+
+mkdir -p ~/.dogg
+cd ~/.dogg
+
+
+if [ -w "." ]
+then
+  echo ""
+else
+  echo "You don't have write permissions in this directory."
+  exit
+fi
+
+title=`youtube-dl --get-title "$1"`
+start=`echo $title| awk '{ print $1 }' `
+
+youtube-dl -o "%(stitle)s.%(ext)s" "$1"
+
+
+if [ `ls *.mkv` ]; then
+  file=`ls *.mkv`
+elif [ `ls *.mp4` ]; then
+  file=`ls *.mp4`
+elif [ `ls *.webm` ]; then
+  file=`ls *.webm`
+else
+  echo "dogg currently only supports mkv, mp4 and webm. Unable to convert it automatically so the origional will be left to try manually."
+fi
+
+
+ffmpeg -i "$file" -codec:v libtheora -qscale:v 6 -codec:a libvorbis -qscale:a 6 "$2".ogv
+
+rm -rf $file
+
+if [ `ls *.mkv` ]; then
+  file=`ls *.mkv`
+  
+  ffmpeg -i "$file" -codec:v libtheora -qscale:v 6 -codec:a libvorbis -qscale:a 6 "$2".ogv
+fi
+
+mv "$2".ogv ~/Downloads

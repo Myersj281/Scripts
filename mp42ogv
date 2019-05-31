@@ -1,0 +1,2 @@
+ 
+ffmpeg -i $1 -acodec libvorbis -vcodec libtheora -f ogg $1.ogv
