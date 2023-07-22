@@ -1,0 +1,50 @@
+#!/bin/zsh
+
+#This script only works with MacOS Big Sur and later which support Apple Silicon.
+
+
+case "$1" in
+help|-h)
+  echo "Before using this script, download the MacOS version that you require from the App Store and partition the appropriate disk in Disk Utility!"
+  echo
+  echo "macinst2disk install [VERSION] [VOLUME]: Install MacOS installation media to VOLUME. "
+  echo
+  echo "VOLUME must be identical to the name that you previously assigned to that volume in Disk Utility. The disk MUST have a GUID partition scheme and the volume MUST be formated as 'Mac OS Plus(With Journaling)'."
+  ;;
+
+version|-v)
+  echo "macinst2disk-1.0.0rc"
+  ;;
+
+install|-I)
+  case "$2" in
+  11|"big sur"|"Big Sur")
+    sudo /Applications/Install\ macOS\ Big\ Sur.app/Contents/Resources/createinstallmedia --volume /Volumes/"$3"
+    ;;
+
+  12|monterey|Monterey)
+    sudo /Applications/Install\ macOS\ Monterey.app/Contents/Resources/createinstallmedia --volume /Volumes/"$3"
+    ;;
+
+  13|ventura|Ventura)
+    sudo /Applications/Install\ macOS\ Ventura.app/Contents/Resources/createinstallmedia --volume /Volumes/"$3"
+    ;;
+
+  14|sonoma|Sonoma)
+    sudo /Applications/Install\ macOS\ Sonoma.app/Contents/Resources/createinstallmedia --volume /Volumes/"$3"
+    ;;
+
+  *)
+    echo "$2 is not a valid MacOS version or codename!"
+    echo "Codenames may be all lowercase or have the first letter capitalized. In the case of Big Sur, it must be in quotes like so: \"Big Sur\" or \"big sur\"."
+    return
+    ;;
+
+  esac
+  ;;
+
+*)
+  echo "Enter 'macinst2disk help' for more information!"
+  ;;
+
+esac
