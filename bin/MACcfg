@@ -1,0 +1,41 @@
+#!/bin/zsh
+
+#Initialize
+VERSION="0.1.0rc"
+mkdir -p $LIB/MACcfg/profiles/
+PROFILES=$LIB/MACcfg/profiles/
+
+case "$1" in
+help|-h)
+  echo "This script is to manage the dock on MacOS via Terminal.app without having to type so much"
+  echo "Usage:"
+  echo "  get MACcfg version: 'MACcfg version'" 
+  echo "  Reset all custom configurations: 'MACcfg reset'"
+  echo "  Restart the dock with current configuration: 'MACcfg restart'"
+  echo "  Load a saved profile: 'MACcfg load PROFILE'" 
+  ;;
+
+version|-v)
+  echo $VERSION
+  ;;
+
+reset|-R)
+  defaults delete com.apple.dock; killall Dock
+  ;;
+
+restart|-r)
+  killall Dock
+  ;;
+
+load|-L)
+  if [ -e "$PROFILES/$2.sh" ]
+  then
+    zsh $PROFILES/$2.sh
+    #Restart Dock
+    MACcfg -r
+  else
+      echo "File '$PROFILES/$2.sh' does not exist! Nothing to do."
+      return
+  fi
+  ;;
+esac
